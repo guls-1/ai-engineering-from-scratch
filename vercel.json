@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node site/fetch-translation-coverage.js && node site/build.js && node site/build-projects.js --strict && node site/build-agents.js && node site/build-manuals.js && node site/build-search.js && node site/clean-urls.js && node site/version-assets.js",
+  "buildCommand": "node site/prebuild.js && node site/build.js && node site/build-projects.js --strict && node site/build-agents.js && node site/build-manuals.js && node site/build-search.js && node site/clean-urls.js && node site/version-assets.js",
   "outputDirectory": "site",
   "framework": null,
   "installCommand": "npm install --no-audit --no-fund",
@@ -67,6 +67,10 @@
     {
       "source": "/lesson",
       "destination": "/api/lesson"
+    },
+    {
+      "source": "/learn/:cleanPhase([a-z0-9-]+)/:cleanLesson([a-z0-9-]+)",
+      "destination": "/api/lesson?cleanPhase=:cleanPhase&cleanLesson=:cleanLesson"
     },
     {
       "source": "/certification",
@@ -747,7 +751,7 @@
   "functions": {
     "api/lesson.js": {
       "maxDuration": 10,
-      "includeFiles": "{site/lesson.html,site/lesson-seo.json,site/lesson-terms.json,site/cheatsheet-map.json,site/practice-map.json,site/lesson-markdown.js,languages.json,phases/*/*/docs/en.md,certifications/*/lessons/*/docs/en.md,lib/og-render.js,lib/og-fonts/*.json}"
+      "includeFiles": "{site/lesson{.html,-seo.json,-code/**},site/lesson-terms.json,site/cheatsheet-map.json,site/practice-map.json,site/lesson-markdown.js,languages.json,phases/*/*/docs/en.md,certifications/*/lessons/*/docs/en.md,lib/og-render.js,lib/og-fonts/*.json}"
     },
     "api/certification.js": {
       "maxDuration": 10,

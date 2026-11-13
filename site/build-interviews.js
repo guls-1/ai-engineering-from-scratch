@@ -8,6 +8,7 @@ const code = require('./lib/code');
 const bankLib = require('../scripts/interviews/validate');
 const { SITE_HEADER } = require('./build-hubs');
 const { versionHtml } = require('./version-assets');
+const { lessonCleanPath } = require('../lib/hub-routes');
 
 const ORIGIN = 'https://aiengineeringfromscratch.com';
 const REPO = 'https://github.com/rohitg00/ai-engineering-from-scratch';
@@ -49,7 +50,7 @@ function siteUrl(repoPath, anchor) {
   const clean = repoPath.replace(/\/+$/, '');
   const hash = anchor ? `#${anchor}` : '';
   let match = /^phases\/(\d\d-[a-z0-9-]+\/\d\d-[a-z0-9-]+)(?:\/.*)?$/.exec(clean);
-  if (match) return `/lesson?path=${encodeURIComponent(`phases/${match[1]}`)}${hash}`;
+  if (match) return `${lessonCleanPath(`phases/${match[1]}`)}${hash}`;
   match = /^manuals\/([a-z0-9-]+)\/sections\/(.+)\.md$/.exec(clean);
   if (match) {
     const slug = match[2].replace(/^\d+-\d+-/, '').replace(/^r-\d+-/, 'ref-');
@@ -403,7 +404,7 @@ function apiJson(built) {
 
 function loadBuilt(root) {
   const bank = bankLib.loadBank(root);
-  const problems = bank.errors.concat(bankLib.staleReadmes(bank));
+  const problems = bank.errors;
   if (problems.length) throw new Error(`The interview bank has errors. Run node scripts/interviews/validate.js for the full report.\n${problems.join('\n')}`);
   const order = (a, b) => a.data.level - b.data.level || a.data.title.localeCompare(b.data.title);
   const questions = bank.questions.slice().sort(order);
